@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cardozo Computer Science — End of Year 2025–2026</title>
+<style>
+  :root{
+    --navy:#0a2a5e;
+    --navy-2:#0f3a82;
+    --navy-3:#1a4ea8;
+    --orange:#ed6e26;
+    --orange-2:#ffa24a;
+    --ink:#0b1b3a;
+    --paper:#ffffff;
+    --mist:#eef3fb;
+    --line:rgba(255,255,255,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#04122e;color:#fff;font-family:"Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--orange-2)}
+
+  /* Scroll-snap deck */
+  .deck{
+    scroll-snap-type:y mandatory;
+    overflow-y:scroll;
+    height:100vh;
+    scroll-behavior:smooth;
+  }
+  .slide{
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    min-height:100vh;
+    width:100%;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:5vh 6vw;
+    overflow:hidden;
+  }
+  .slide-inner{width:100%;max-width:1200px;position:relative;z-index:2}
+
+  /* Backgrounds */
+  .bg-navy{background:radial-gradient(1200px 600px at 80% -10%,rgba(237,110,38,.18),transparent 60%),radial-gradient(900px 600px at -10% 110%,rgba(26,78,168,.55),transparent 60%),linear-gradient(180deg,#04122e 0%,#0a2a5e 100%)}
+  .bg-orange{background:radial-gradient(1000px 700px at 20% 20%,rgba(255,162,74,.35),transparent 60%),linear-gradient(135deg,#0a2a5e 0%,#1a4ea8 60%,#ed6e26 140%)}
+  .bg-ink{background:radial-gradient(800px 600px at 90% 90%,rgba(237,110,38,.18),transparent 60%),linear-gradient(180deg,#0a2a5e 0%,#04122e 100%)}
+
+  /* Decorative blobs */
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none;z-index:1}
+  .blob.a{width:520px;height:520px;background:#ed6e26;top:-120px;right:-140px}
+  .blob.b{width:600px;height:600px;background:#1a4ea8;bottom:-220px;left:-180px}
+
+  /* Top progress bar */
+  .progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--orange),var(--orange-2));z-index:50;transition:width .25s ease}
+
+  /* Side dot nav */
+  .dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:10px}
+  .dots button{
+    width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.55);
+    background:transparent;cursor:pointer;padding:0;transition:transform .2s,background .2s,border-color .2s;
+  }
+  .dots button.active{background:var(--orange);border-color:var(--orange);transform:scale(1.25)}
+  .dots button:hover{border-color:var(--orange-2)}
+
+  /* Brand bar */
+  .brand{position:fixed;top:14px;left:18px;z-index:40;display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
+  .brand .crest{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--navy-3),var(--orange));display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .brand small{opacity:.7;font-weight:500;display:block;font-size:11px;letter-spacing:1.2px;text-transform:uppercase}
+
+  /* Type & layout */
+  h1,h2,h3{margin:0;line-height:1.05;letter-spacing:-.5px}
+  h1{font-size:clamp(38px,6.4vw,84px);font-weight:800}
+  h2{font-size:clamp(28px,4.4vw,56px);font-weight:800}
+  h3{font-size:clamp(20px,2vw,28px);font-weight:700}
+  p{font-size:clamp(15px,1.15vw,18px);line-height:1.65;opacity:.92}
+  .eyebrow{display:inline-block;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--orange-2);font-weight:700;border:1px solid rgba(255,162,74,.45);padding:6px 12px;border-radius:999px;background:rgba(237,110,38,.08)}
+  .accent{color:var(--orange-2)}
+  .underline{background:linear-gradient(transparent 60%,rgba(237,110,38,.55) 60%)}
+  .muted{opacity:.75}
+
+  /* Grid */
+  .grid{display:grid;gap:22px}
+  .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:900px){.grid.cols-2,.grid.cols-3{grid-template-columns:1fr}}
+
+  /* Cards */
+  .card{
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:26px;
+    backdrop-filter:blur(6px);
+    transition:transform .35s ease,border-color .35s ease,background .35s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(255,162,74,.55);background:rgba(255,255,255,.09)}
+  .card .icon{
+    width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--orange),var(--orange-2));color:#1a1a1a;font-weight:800;margin-bottom:14px;
+    box-shadow:0 10px 24px rgba(237,110,38,.35)
+  }
+  .card h3{margin-bottom:8px}
+
+  /* Stats */
+  .stat{display:flex;flex-direction:column;gap:4px}
+  .stat .num{font-size:clamp(40px,5vw,64px);font-weight:800;background:linear-gradient(135deg,#fff,var(--orange-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;opacity:.75}
+
+  /* Hint */
+  .hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.6;display:flex;align-items:center;gap:8px;z-index:3}
+  .hint .arrow{display:inline-block;animation:bob 1.6s infinite ease-in-out}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+  /* Title slide */
+  .hero-title{display:flex;flex-direction:column;gap:22px}
+  .hero-title .year{display:inline-flex;align-items:center;gap:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:13px;color:var(--orange-2)}
+  .hero-title .year .bar{width:48px;height:2px;background:var(--orange)}
+  .hero-title h1 span{display:block}
+  .hero-title h1 .l1{font-weight:300;font-size:.55em;letter-spacing:6px;text-transform:uppercase;color:#cfd9ec}
+  .hero-title h1 .l2{font-size:1em}
+  .hero-title h1 .l3{font-size:1em;color:var(--orange-2)}
+  .signature{margin-top:24px;display:flex;align-items:center;gap:14px;font-size:14px;opacity:.85}
+  .signature .dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px rgba(237,110,38,.18)}
+
+  /* Code window */
+  .codewin{background:#06122c;border:1px solid var(--line);border-radius:14px;overflow:hidden;font-family:"JetBrains Mono","Fira Code",Consolas,monospace;font-size:14px}
+  .codewin .bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#091a3d;border-bottom:1px solid var(--line)}
+  .codewin .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .codewin .bar i:nth-child(1){background:#ff5f57}
+  .codewin .bar i:nth-child(2){background:#febc2e}
+  .codewin .bar i:nth-child(3){background:#28c840}
+  .codewin .bar span{margin-left:10px;font-size:12px;opacity:.6}
+  .codewin pre{margin:0;padding:18px 20px;color:#dfe7ff;line-height:1.7;white-space:pre-wrap}
+  .tok-k{color:#ffa24a}
+  .tok-s{color:#9bd0ff}
+  .tok-c{color:#7c8db5;font-style:italic}
+  .tok-f{color:#ffd28a}
+  .tok-n{color:#ec9bff}
+  .caret{display:inline-block;width:8px;background:var(--orange);margin-left:2px;animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* Pills */
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .pill{font-size:12px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);letter-spacing:.5px}
+  .pill.hot{background:rgba(237,110,38,.18);border-color:rgba(237,110,38,.55);color:#ffd2b3}
+
+  /* Spotlight */
+  .spotlight{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+  @media (max-width:900px){.spotlight{grid-template-columns:1fr}}
+  .avatars{display:flex;gap:14px;margin-bottom:20px}
+  .ava{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#0b1b3a;background:linear-gradient(135deg,#fff,var(--orange-2));box-shadow:0 14px 30px rgba(0,0,0,.35);border:3px solid #fff}
+  .ava.b{background:linear-gradient(135deg,var(--orange),#ffd28a)}
+  .quote{font-size:clamp(20px,2vw,26px);line-height:1.5;font-weight:600;border-left:4px solid var(--orange);padding:8px 0 8px 20px;color:#fff}
+  .timeline{margin-top:22px;display:flex;flex-direction:column;gap:14px}
+  .tl{display:flex;gap:14px;align-items:flex-start}
+  .tl .bullet{width:10px;height:10px;border-radius:50%;background:var(--orange);margin-top:8px;flex-shrink:0;box-shadow:0 0 0 4px rgba(237,110,38,.2)}
+  .tl b{display:block;color:#fff}
+  .tl span{font-size:14px;opacity:.85}
+
+  /* Closing */
+  .cta{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--orange),var(--orange-2));color:#0b1b3a;font-weight:800;padding:14px 22px;border-radius:14px;letter-spacing:.5px;box-shadow:0 18px 40px rgba(237,110,38,.35)}
+
+  /* Reveal animations */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+  .slide.in-view .reveal{opacity:1;transform:none}
+  .slide.in-view .r1{transition-delay:.05s}
+  .slide.in-view .r2{transition-delay:.18s}
+  .slide.in-view .r3{transition-delay:.32s}
+  .slide.in-view .r4{transition-delay:.46s}
+  .slide.in-view .r5{transition-delay:.6s}
+
+  /* Helper */
+  .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .divider{height:1px;background:var(--line);margin:28px 0}
+  .kbd{font-family:"JetBrains Mono",Consolas,monospace;font-size:12px;background:rgba(255,255,255,.08);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 8px}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="brand"><div class="crest">C</div><div><div>Cardozo CS</div><small>End of Year 2025–2026</small></div></div>
+<nav class="dots" id="dots" aria-label="Slide navigation"></nav>
+
+<main class="deck" id="deck">
+
+  <!-- 1. TITLE -->
+  <section class="slide bg-navy" data-title="Welcome">
+    <div class="blob a"></div><div class="blob b"></div>
+    <div class="slide-inner hero-title">
+      <div class="year reveal r1"><span class="bar"></span> Academic Year 2025 – 2026</div>
+      <h1 class="reveal r2">
+        <span class="l1">Benjamin N. Cardozo High School</span>
+        <span class="l2">Computer Science</span>
+        <span class="l3">End of Year Summary.</span>
+      </h1>
+      <p class="reveal r3" style="max-width:720px;font-size:clamp(17px,1.4vw,22px)">
+        A year of building <span class="underline">architects, not just coders</span> — featuring program highlights, student breakthroughs, and a look at the future of CS at Cardozo.
+      </p>
+      <div class="signature reveal r4"><span class="dot"></span> Prepared for the Chairperson — Mathematics &amp; Computer Science Department</div>
+      <div class="pills reveal r5">
+        <span class="pill hot">AP Computer Science A</span>
+        <span class="pill hot">CS Essentials (9th Grade)</span>
+        <span class="pill">Student Spotlight</span>
+        <span class="pill">AI &amp; Research</span>
+      </div>
+    </div>
+    <div class="hint"><span class="arrow">&#x25BC;</span> Scroll or press <span class="kbd">&rarr;</span> to advance</div>
+  </section>
+
+  <!-- 2. OVERVIEW / TOC -->
+  <section class="slide bg-ink" data-title="At a Glance">
+    <div class="blob a" style="opacity:.35"></div>
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow">At a Glance</div>
+      <h2 class="reveal r2" style="margin-top:14px;max-width:900px">A program that turned <span class="accent">syntax learners</span> into <span class="underline">software architects.</span></h2>
+      <div class="divider"></div>
+      <div class="grid cols-3">
+        <div class="card reveal r2">
+          <div class="icon">1</div>
+          <h3>AP Computer Science A</h3>
+          <p class="muted">From recursion to enterprise-grade architecture — the rigor of a college-level CS course, delivered in high school.</p>
+        </div>
+        <div class="card reveal r3">
+          <div class="icon">2</div>
+          <h3>CS Essentials (9th Grade)</h3>
+          <p class="muted">Full-stack web apps, nested data systems, and AI-augmented engineering — in their first year of code.</p>
+        </div>
+        <div class="card reveal r4">
+          <div class="icon">3</div>
+          <h3>Student Achievement</h3>
+          <p class="muted">Cardozo students presenting machine learning research at regional symposia — and giving back through open educational platforms.</p>
+        </div>
+      </div>
+
+      <div class="grid cols-3" style="margin-top:28px">
+        <div class="card reveal r3"><div class="stat"><div class="num" data-count="2">0</div><div class="label">Courses Reimagined</div></div></div>
+        <div class="card reveal r4"><div class="stat"><div class="num" data-count="100" data-suffix="%">0%</div><div class="label">College-Ready Curriculum</div></div></div>
+        <div class="card reveal r5"><div class="stat"><div class="num" data-count="2" data-suffix="+">0</div><div class="label">Students in Active Research</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. AP CS A — DIVIDER / VISION -->
+  <section class="slide bg-orange" data-title="AP CS A">
+    <div class="blob b" style="opacity:.4"></div>
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow" style="border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.1)">Course Spotlight · 01</div>
+      <h1 class="reveal r2" style="margin-top:18px;max-width:1100px">
+        AP Computer Science A
+      </h1>
+      <p class="reveal r3" style="max-width:820px;margin-top:18px;font-size:clamp(18px,1.5vw,24px);font-weight:500">
+        This year's curriculum shifted from <em>simple script writing</em> to <span class="underline">designing and building enterprise-level systems.</span>
+      </p>
+      <p class="reveal r4 muted" style="max-width:820px">
+        Students moved beyond syntax memorization — they now refine complex algorithms for peak performance and use recursive strategies to overcome highly challenging problems. The result: the computational fluency and technical resilience needed to lead in any university CS program.
+      </p>
+      <div class="pills reveal r5">
+        <span class="pill hot">Class Composition</span>
+        <span class="pill hot">2D Data Structures</span>
+        <span class="pill hot">Recursion</span>
+        <span class="pill hot">Sorting &amp; Searching</span>
+        <span class="pill hot">FRQ Mastery</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. AP CS A — FROM PROGRAMMERS TO ARCHITECTS -->
+  <section class="slide bg-navy" data-title="From Programmers to Architects">
+    <div class="blob a"></div>
+    <div class="slide-inner">
+      <div class="grid cols-2" style="align-items:center;gap:48px">
+        <div>
+          <div class="reveal r1 eyebrow">Pillar 01</div>
+          <h2 class="reveal r2" style="margin-top:14px">From Programmers to <span class="accent">Architects.</span></h2>
+          <p class="reveal r3" style="margin-top:18px">
+            Our students transitioned from basic coding to high-level <b>software architecture</b> — mastering complex class composition and 2D data structures.
+          </p>
+          <p class="reveal r4">
+            They can now design and implement <span class="underline">interconnected systems</span> that mirror real-world applications and sophisticated game logic.
+          </p>
+          <div class="pills reveal r5">
+            <span class="pill">Encapsulation</span>
+            <span class="pill">Inheritance</span>
+            <span class="pill">Composition</span>
+            <span class="pill">2D Arrays</span>
+          </div>
+        </div>
+        <div class="reveal r3">
+          <div class="codewin">
+            <div class="bar"><i></i><i></i><i></i><span>GameWorld.java</span></div>
+            <pre><span class="tok-c">// Students architect interconnected systems</span>
+<span class="tok-k">public class</span> <span class="tok-n">GameWorld</span> {
+  <span class="tok-k">private</span> <span class="tok-n">Tile</span>[][] grid;
+  <span class="tok-k">private</span> <span class="tok-n">List</span>&lt;<span class="tok-n">Entity</span>&gt; entities;
+
+  <span class="tok-k">public void</span> <span class="tok-f">tick</span>() {
+    <span class="tok-k">for</span> (<span class="tok-n">Entity</span> e : entities) {
+      e.<span class="tok-f">update</span>(grid);
+      <span class="tok-k">if</span> (e.<span class="tok-f">collides</span>()) <span class="tok-f">resolve</span>(e);
+    }
+  }
+}<span class="caret">&nbsp;</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. AP CS A — ALGORITHMIC MATURITY -->
+  <section class="slide bg-ink" data-title="Algorithmic Maturity">
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow">Pillar 02</div>
+      <h2 class="reveal r2" style="margin-top:14px;max-width:1000px">Algorithmic &amp; <span class="accent">Logical Maturity.</span></h2>
+      <p class="reveal r3" style="max-width:880px;margin-top:14px">
+        The class achieved significant computational maturity — implementing and analyzing the efficiency of advanced sorting and searching methods. Through recursion, they developed the abstract thinking to break down intimidating problems into <span class="underline">elegant, manageable solutions.</span>
+      </p>
+
+      <div class="grid cols-3" style="margin-top:30px">
+        <div class="card reveal r2">
+          <div class="icon">&Sigma;</div>
+          <h3>Sorting</h3>
+          <p class="muted">Selection · Insertion · Merge — students reason about <b>O(n log n)</b> versus <b>O(n²)</b> in real workloads.</p>
+        </div>
+        <div class="card reveal r3">
+          <div class="icon">&#x1F50E;</div>
+          <h3>Searching</h3>
+          <p class="muted">Linear and binary search — and the discipline to choose the right tool for the data.</p>
+        </div>
+        <div class="card reveal r4">
+          <div class="icon">&#x21BB;</div>
+          <h3>Recursion</h3>
+          <p class="muted">Decomposing problems into base cases and recursive steps — the heart of abstract thinking.</p>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:28px;gap:22px">
+        <div class="card reveal r4">
+          <div class="row" style="justify-content:space-between">
+            <h3>Efficiency, visualized</h3>
+            <span class="pill hot">Big-O Intuition</span>
+          </div>
+          <svg viewBox="0 0 600 200" style="width:100%;height:auto;margin-top:10px" aria-label="Big-O comparison chart">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#ed6e26"/><stop offset="1" stop-color="#ffa24a"/></linearGradient>
+              <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#9bd0ff"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+            </defs>
+            <line x1="40" y1="170" x2="580" y2="170" stroke="rgba(255,255,255,.2)"/>
+            <line x1="40" y1="20" x2="40" y2="170" stroke="rgba(255,255,255,.2)"/>
+            <path d="M40 168 Q 200 165 580 150" stroke="url(#g2)" stroke-width="3" fill="none"/>
+            <path d="M40 168 Q 300 100 580 30" stroke="url(#g1)" stroke-width="3" fill="none"/>
+            <text x="560" y="146" fill="#cfd9ec" font-size="12" text-anchor="end">O(log n) — binary search</text>
+            <text x="560" y="22" fill="#ffd2b3" font-size="12" text-anchor="end">O(n²) — naive sort</text>
+            <text x="40" y="190" fill="#9aa6c2" font-size="11">input size →</text>
+          </svg>
+        </div>
+        <div class="card reveal r5">
+          <div class="codewin" style="background:transparent;border:none">
+            <div class="bar" style="background:rgba(255,255,255,.06)"><i></i><i></i><i></i><span>Recursion.java</span></div>
+            <pre><span class="tok-c">// Elegant decomposition</span>
+<span class="tok-k">public int</span> <span class="tok-f">factorial</span>(<span class="tok-k">int</span> n) {
+  <span class="tok-k">if</span> (n &lt;= 1) <span class="tok-k">return</span> 1;       <span class="tok-c">// base</span>
+  <span class="tok-k">return</span> n * <span class="tok-f">factorial</span>(n - 1); <span class="tok-c">// step</span>
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. AP CS A — TECHNICAL RESILIENCE -->
+  <section class="slide bg-navy" data-title="Technical Resilience">
+    <div class="blob b"></div>
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow">Pillar 03</div>
+      <h2 class="reveal r2" style="margin-top:14px;max-width:1100px">
+        Technical Resilience &amp; <span class="accent">College Readiness.</span>
+      </h2>
+      <p class="reveal r3" style="max-width:900px;margin-top:18px">
+        Students built the stamina to deconstruct dense, multi-page Free Response Questions and translate complex requirements into <span class="underline">high-quality, industry-standard code.</span>
+      </p>
+      <p class="reveal r4 muted" style="max-width:900px">
+        They leave this year with a foundation of technical resilience that ensures they will lead in any collegiate-level computer science environment.
+      </p>
+
+      <div class="grid cols-3" style="margin-top:30px">
+        <div class="card reveal r3"><div class="stat"><div class="num" data-count="100" data-suffix="%">0%</div><div class="label">Curriculum Aligned to AP CS A</div></div></div>
+        <div class="card reveal r4"><div class="stat"><div class="num" data-count="6" data-suffix="+">0</div><div class="label">Multi-Page FRQs Tackled</div></div></div>
+        <div class="card reveal r5"><div class="stat"><div class="num" data-count="1" data-suffix="st">0</div><div class="label">Step Toward a CS Degree</div></div></div>
+      </div>
+
+      <div class="card reveal r5" style="margin-top:24px;border-color:rgba(237,110,38,.55);background:linear-gradient(135deg,rgba(237,110,38,.18),rgba(255,162,74,.05))">
+        <div class="row" style="gap:18px">
+          <div class="icon" style="margin-bottom:0">&#x1F393;</div>
+          <p style="margin:0;font-size:clamp(16px,1.3vw,20px)"><b>The takeaway:</b> Cardozo CS graduates aren't just prepared for the AP exam — they're prepared for the lecture hall on day one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. STUDENT SPOTLIGHT -->
+  <section class="slide bg-orange" data-title="Student Spotlight">
+    <div class="blob b" style="opacity:.35"></div>
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow" style="border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.1)">Student Spotlight · Outside Achievement</div>
+      <h2 class="reveal r2" style="margin-top:14px">Innovation in <span class="accent" style="color:#fff;background:linear-gradient(transparent 60%,rgba(10,42,94,.55) 60%)">AI &amp; Education</span>.</h2>
+
+      <div class="spotlight" style="margin-top:34px">
+        <div>
+          <div class="avatars reveal r2">
+            <div class="ava" title="Tasnim Jannat">TJ</div>
+            <div class="ava b" title="Alex Zhuo">AZ</div>
+          </div>
+          <div class="reveal r3">
+            <h3 style="font-size:clamp(22px,2vw,30px)">Tasnim Jannat &amp; Alex Zhuo</h3>
+            <p class="muted" style="margin-top:6px">11th-Grade Computer Science Standouts · Cardozo High School</p>
+          </div>
+          <p class="reveal r4" style="margin-top:18px">
+            Conducting high-level <b>machine learning research</b> at the Queensborough Community College <b>STEP program</b>, mentored by <b>Dr. Yusuf Danisman</b>. Their project analyzes how
+            <span class="underline" style="background:linear-gradient(transparent 60%,rgba(10,42,94,.55) 60%)">"hyperparameter tuning"</span>
+            impacts the precision of supervised learning algorithms like <b>Decision Trees</b> and <b>XGBoost</b> — systematically testing variables to find optimal configurations for predictive accuracy.
+          </p>
+          <div class="pills reveal r5">
+            <span class="pill" style="background:rgba(10,42,94,.35);border-color:rgba(255,255,255,.4);color:#fff">Decision Trees</span>
+            <span class="pill" style="background:rgba(10,42,94,.35);border-color:rgba(255,255,255,.4);color:#fff">XGBoost</span>
+            <span class="pill" style="background:rgba(10,42,94,.35);border-color:rgba(255,255,255,.4);color:#fff">Hyperparameter Tuning</span>
+            <span class="pill" style="background:rgba(10,42,94,.35);border-color:rgba(255,255,255,.4);color:#fff">Supervised Learning</span>
+          </div>
+        </div>
+
+        <div class="reveal r3">
+          <div class="card" style="background:rgba(10,42,94,.55);border-color:rgba(255,255,255,.25)">
+            <div class="quote">
+              "Their dedication to both technical excellence and peer mentorship is a credit to our school community."
+            </div>
+            <div class="timeline">
+              <div class="tl">
+                <span class="bullet"></span>
+                <div>
+                  <b>25th QBC STEP Regional Conference</b>
+                  <span>Presented their hyperparameter tuning research findings.</span>
+                </div>
+              </div>
+              <div class="tl">
+                <span class="bullet"></span>
+                <div>
+                  <b>Spring Student Symposium 2026</b>
+                  <span>Currently preparing to compete with their refined results.</span>
+                </div>
+              </div>
+              <div class="tl">
+                <span class="bullet"></span>
+                <div>
+                  <b>Open Python Learning Platform</b>
+                  <span>Building a free educational website with QCC STEP — providing accessible Python resources for self-taught learners.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. CS ESSENTIALS — INTRO -->
+  <section class="slide bg-ink" data-title="CS Essentials">
+    <div class="blob a" style="opacity:.4"></div>
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow">Course Spotlight · 02</div>
+      <h1 class="reveal r2" style="margin-top:18px;max-width:1100px">
+        Computer Science <span class="accent">Essentials.</span>
+      </h1>
+      <p class="reveal r3 muted" style="margin-top:8px;font-size:14px;letter-spacing:2px;text-transform:uppercase">First-Year Course · 9th Grade</p>
+      <p class="reveal r3" style="max-width:900px;margin-top:18px;font-size:clamp(18px,1.5vw,24px);font-weight:500">
+        We moved from writing <span style="font-family:monospace;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px">"Hello World"</span> to building <span class="underline">Full-Stack Apps.</span>
+      </p>
+      <p class="reveal r4 muted" style="max-width:900px">
+        9th graders aren't just typing lines of code — they are architecting logic-driven worlds and using professional developer tools to launch interactive software. They are essentially learning the <b>"engine" of the 21st-century economy.</b>
+      </p>
+      <div class="pills reveal r5">
+        <span class="pill hot">Nested Dictionaries</span>
+        <span class="pill hot">Flask · Full-Stack</span>
+        <span class="pill hot">HTML / CSS</span>
+        <span class="pill hot">AI-Augmented Engineering</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. CS ESSENTIALS — DATA SYSTEMS -->
+  <section class="slide bg-navy" data-title="Architecting Data Systems">
+    <div class="blob a"></div>
+    <div class="slide-inner">
+      <div class="grid cols-2" style="align-items:center;gap:48px">
+        <div>
+          <div class="reveal r1 eyebrow">Pillar 01</div>
+          <h2 class="reveal r2" style="margin-top:14px">Architecting Complex <span class="accent">Data Systems.</span></h2>
+          <p class="reveal r3" style="margin-top:18px">
+            Students mastered the transition from basic commands to building sophisticated data models using <b>nested dictionaries.</b>
+          </p>
+          <p class="reveal r4">
+            They can now architect <span class="underline">multi-dimensional virtual environments</span> and complex data maps — a high-level skill that mirrors how professional databases and modern software applications organize information.
+          </p>
+          <div class="pills reveal r5">
+            <span class="pill">Dictionaries</span>
+            <span class="pill">Lists of Dicts</span>
+            <span class="pill">Nesting</span>
+            <span class="pill">Schema Thinking</span>
+          </div>
+        </div>
+        <div class="reveal r3">
+          <div class="codewin">
+            <div class="bar"><i></i><i></i><i></i><span>world.py</span></div>
+            <pre><span class="tok-c"># Students design multi-dimensional data models</span>
+world = {
+  <span class="tok-s">"forest"</span>: {
+    <span class="tok-s">"npcs"</span>: [<span class="tok-s">"druid"</span>, <span class="tok-s">"wolf"</span>],
+    <span class="tok-s">"items"</span>: {<span class="tok-s">"map"</span>: <span class="tok-k">True</span>, <span class="tok-s">"key"</span>: <span class="tok-k">False</span>},
+    <span class="tok-s">"exits"</span>: {<span class="tok-s">"north"</span>: <span class="tok-s">"cave"</span>, <span class="tok-s">"east"</span>: <span class="tok-s">"river"</span>}
+  },
+  <span class="tok-s">"cave"</span>: { <span class="tok-c">#... a whole interconnected world</span> }
+}<span class="caret">&nbsp;</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. CS ESSENTIALS — FULL-STACK -->
+  <section class="slide bg-ink" data-title="Full-Stack">
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow">Pillar 02</div>
+      <h2 class="reveal r2" style="margin-top:14px;max-width:1100px">
+        Bridging Logic with <span class="accent">Real-World Interfaces.</span>
+      </h2>
+      <p class="reveal r3" style="max-width:900px;margin-top:14px">
+        Moving beyond the "black box" of the terminal and into <b>Full-Stack Web Development with Flask</b>, students are building functional, interactive web applications.
+      </p>
+      <p class="reveal r4 muted" style="max-width:900px">
+        They've learned to synchronize back-end Python "engines" with front-end HTML/CSS "dashboards" — a professional-grade understanding of <span class="underline">how the internet actually works.</span>
+      </p>
+
+      <div class="grid cols-3" style="margin-top:30px">
+        <div class="card reveal r3">
+          <div class="icon" style="background:linear-gradient(135deg,#1a4ea8,#9bd0ff);color:#0b1b3a">&#x1F40D;</div>
+          <h3>Back-End</h3>
+          <p class="muted">Python · Flask routes · request handling · server-side logic.</p>
+        </div>
+        <div class="card reveal r4">
+          <div class="icon">&harr;</div>
+          <h3>The Bridge</h3>
+          <p class="muted">Templates · forms · JSON · the contract between client and server.</p>
+        </div>
+        <div class="card reveal r5">
+          <div class="icon" style="background:linear-gradient(135deg,#fff,#ffd28a);color:#0b1b3a">&#x1F310;</div>
+          <h3>Front-End</h3>
+          <p class="muted">HTML · CSS · responsive layout · the dashboard the user actually sees.</p>
+        </div>
+      </div>
+
+      <div class="card reveal r5" style="margin-top:24px">
+        <div class="row" style="justify-content:space-between;align-items:flex-start;gap:24px">
+          <div style="flex:1;min-width:240px">
+            <h3>A request, end-to-end</h3>
+            <p class="muted" style="margin-top:6px">Students trace a click from the browser, through a Flask route, into a data model, and back as rendered HTML — owning the entire stack.</p>
+          </div>
+          <svg viewBox="0 0 520 110" style="flex:2;min-width:280px;width:100%;height:auto" aria-label="Full stack request flow">
+            <defs>
+              <linearGradient id="flow" x1="0" x2="1"><stop offset="0" stop-color="#9bd0ff"/><stop offset=".5" stop-color="#ed6e26"/><stop offset="1" stop-color="#ffd28a"/></linearGradient>
+            </defs>
+            <rect x="10" y="35" width="110" height="40" rx="10" fill="rgba(155,208,255,.15)" stroke="#9bd0ff"/>
+            <text x="65" y="60" fill="#fff" font-size="13" text-anchor="middle">Browser</text>
+            <rect x="200" y="35" width="120" height="40" rx="10" fill="rgba(237,110,38,.2)" stroke="#ed6e26"/>
+            <text x="260" y="60" fill="#fff" font-size="13" text-anchor="middle">Flask · Python</text>
+            <rect x="400" y="35" width="110" height="40" rx="10" fill="rgba(255,210,138,.18)" stroke="#ffd28a"/>
+            <text x="455" y="60" fill="#fff" font-size="13" text-anchor="middle">HTML / CSS</text>
+            <line x1="120" y1="55" x2="200" y2="55" stroke="url(#flow)" stroke-width="2" marker-end="url(#arr)"/>
+            <line x1="320" y1="55" x2="400" y2="55" stroke="url(#flow)" stroke-width="2" marker-end="url(#arr)"/>
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#ffd28a"/></marker></defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. CS ESSENTIALS — AI AUGMENTED -->
+  <section class="slide bg-orange" data-title="AI-Augmented Engineering">
+    <div class="blob b" style="opacity:.4"></div>
+    <div class="slide-inner">
+      <div class="reveal r1 eyebrow" style="border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.1)">Pillar 03</div>
+      <h2 class="reveal r2" style="margin-top:14px;max-width:1100px">
+        Pioneering <span style="background:linear-gradient(transparent 60%,rgba(10,42,94,.55) 60%)">AI-Augmented</span> Engineering.
+      </h2>
+      <p class="reveal r3" style="max-width:900px;margin-top:18px;font-size:clamp(17px,1.3vw,21px)">
+        In a forward-thinking shift, students are learning to act as <b>Product Architects</b> through <em>"Vibe Coding."</em>
+      </p>
+      <p class="reveal r4" style="max-width:900px">
+        They are trained to use AI strategically to prototype professional-grade visual interfaces — while maintaining <b>rigorous, manual control</b> over the underlying logic. This prepares them for a modern workforce where <span style="background:linear-gradient(transparent 60%,rgba(10,42,94,.55) 60%)">human creativity and logical oversight</span> are the primary drivers of AI efficiency.
+      </p>
+
+      <div class="grid cols-3" style="margin-top:30px">
+        <div class="card reveal r3" style="background:rgba(10,42,94,.5);border-color:rgba(255,255,255,.25)">
+          <div class="icon">&#x1F9E0;</div>
+          <h3>Architect</h3>
+          <p class="muted">Students define the <b>what</b> and <b>why</b> — the product vision, the system shape, the user experience.</p>
+        </div>
+        <div class="card reveal r4" style="background:rgba(10,42,94,.5);border-color:rgba(255,255,255,.25)">
+          <div class="icon">&#x1F916;</div>
+          <h3>Augment</h3>
+          <p class="muted">AI accelerates UI prototyping and boilerplate — the <b>how it looks</b>, scaffolded fast.</p>
+        </div>
+        <div class="card reveal r5" style="background:rgba(10,42,94,.5);border-color:rgba(255,255,255,.25)">
+          <div class="icon">&#x2713;</div>
+          <h3>Audit</h3>
+          <p class="muted">Students manually own the <b>logic, correctness, and security</b> — the engineering rigor never goes to AI.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. CLOSING -->
+  <section class="slide bg-navy" data-title="Looking Forward">
+    <div class="blob a"></div><div class="blob b"></div>
+    <div class="slide-inner" style="text-align:center">
+      <div class="reveal r1 eyebrow">Looking Forward</div>
+      <h1 class="reveal r2" style="margin-top:18px;max-width:1100px;margin-left:auto;margin-right:auto">
+        Cardozo CS isn't teaching <span class="muted" style="text-decoration:line-through;opacity:.45">a class</span> — <br/>it's building the <span class="accent">next generation of engineers.</span>
+      </h1>
+      <p class="reveal r3" style="max-width:780px;margin:24px auto 0;font-size:clamp(17px,1.3vw,21px)">
+        From 9th-grade full-stack apps to AP-level architecture, from regional research conferences to open-source mentorship — our students are <span class="underline">leading, not just learning.</span>
+      </p>
+
+      <div class="reveal r4" style="margin-top:36px">
+        <span class="cta">Ready for what's next &rarr;</span>
+      </div>
+
+      <div class="reveal r5 muted" style="margin-top:46px;font-size:13px;letter-spacing:2px;text-transform:uppercase">
+        Benjamin N. Cardozo High School &nbsp;·&nbsp; Mathematics &amp; Computer Science Department &nbsp;·&nbsp; 2025 – 2026
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  const deck = document.getElementById('deck');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
+  const progress = document.getElementById('progress');
+
+  // Build dot navigation
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.title = s.dataset.title || ('Slide ' + (i + 1));
+    b.setAttribute('aria-label', b.title);
+    b.addEventListener('click', () => {
+      s.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    dotsEl.appendChild(b);
+  });
+  const dots = Array.from(dotsEl.children);
+
+  // Intersection observer: in-view + dot/progress sync + counters + code typing
+  const seen = new WeakSet();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const idx = slides.indexOf(e.target);
+      if (e.isIntersecting && e.intersectionRatio > 0.55) {
+        e.target.classList.add('in-view');
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[idx]) dots[idx].classList.add('active');
+        progress.style.width = ((idx) / Math.max(1, slides.length - 1) * 100) + '%';
+        if (!seen.has(e.target)) {
+          seen.add(e.target);
+          animateCounters(e.target);
+        }
+      }
+    });
+  }, {threshold: [0, 0.55, 0.9]});
+  slides.forEach(s => io.observe(s));
+
+  // Stat counter animation
+  function animateCounters(scope){
+    const nums = scope.querySelectorAll('.num[data-count]');
+    nums.forEach(n => {
+      const target = parseFloat(n.dataset.count);
+      const suffix = n.dataset.suffix || '';
+      const dur = 1100;
+      const start = performance.now();
+      function tick(now){
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const v = Math.round(target * eased);
+        n.textContent = v + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+        else n.textContent = target + suffix;
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // Keyboard navigation
+  function currentIndex(){
+    const top = deck.scrollTop;
+    let best = 0, bestDist = Infinity;
+    slides.forEach((s, i) => {
+      const d = Math.abs(s.offsetTop - top);
+      if (d < bestDist){ bestDist = d; best = i; }
+    });
+    return best;
+  }
+  document.addEventListener('keydown', (e) => {
+    const i = currentIndex();
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){
+      e.preventDefault();
+      if (slides[i + 1]) slides[i + 1].scrollIntoView({behavior:'smooth'});
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp'){
+      e.preventDefault();
+      if (slides[i - 1]) slides[i - 1].scrollIntoView({behavior:'smooth'});
+    } else if (e.key === 'Home'){
+      e.preventDefault();
+      slides[0].scrollIntoView({behavior:'smooth'});
+    } else if (e.key === 'End'){
+      e.preventDefault();
+      slides[slides.length - 1].scrollIntoView({behavior:'smooth'});
+    }
+  });
+
+  // Trigger first slide reveals immediately
+  if (slides[0]) slides[0].classList.add('in-view');
+})();
+</script>
+</body>
+</html>
